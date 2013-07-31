@@ -53,11 +53,11 @@ class LSystemFactory(object):
 		print(self.rules)
 	
 	
-	def evolve_on_tk_canvas(self, 
-	                        surface_handler, 
-	                        expression = None, 
-	                        current_order = 0, 
-	                        target_order = 5):
+	def evolve_on_surface(self, 
+	                      surface_handler, 
+	                      expression = None, 
+	                      current_order = 0, 
+	                      target_order = 5):
 		"""
 		Recursively evolves the LSystem onto a given surface, through a surface handler using a LIFO stack mechanism, 
 		the fully expanded expression is not stored in memory.
@@ -72,10 +72,10 @@ class LSystemFactory(object):
 				#the next rule is pushed onto the call stack with the current
 				#recursion depth as long as the specified
 				#target depth (or order) is not reached.
-				cx, cy, angle = self.evolve_on_tk_canvas(canvas_handler, 
-				                                         self.rules[token], 
-				                                         current_order + 1, 
-				                                         target_order)
+				self.evolve_on_surface(surface_handler, 
+				                       self.rules[token], 
+				                       current_order + 1, 
+				                       target_order)
 			
 			elif (token in self.forward_tokens):
 				print(token, end = ' ')

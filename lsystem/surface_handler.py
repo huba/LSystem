@@ -25,8 +25,8 @@ class SurfaceHandler(object):
 		"""
 		Sets the initial angle and coordinates
 		"""
-		self.x, self.y = 0, 0
-		self.angle = 0 # The current angle to the horizontal axis, increases anti-clockwise.
+		(self.x, self.y) = coordinates
+		self.angle = angle % 360 # The current angle to the horizontal axis, increases anti-clockwise.
 		self.coordinate_stack = []
 	
 	
@@ -38,8 +38,8 @@ class SurfaceHandler(object):
 		old_x, old_y = self.x, self.y
 		
 		# Resolving the displacement vector
-		self.x = old_x + math.cos(math.radians(angle)) * distance
-		self.y = old_y - math.sin(math.radians(angle)) * distance
+		self.x = old_x + math.cos(math.radians(self.angle)) * distance
+		self.y = old_y + math.sin(math.radians(self.angle)) * distance
 		
 		self._draw_line(old_x, old_y, self.x, self.y)
 	
@@ -80,7 +80,7 @@ class SurfaceHandler(object):
 		"""
 		Turning left by a given angle.
 		"""
-		self._turn(del_angle):
+		self._turn(del_angle)
 	
 	
 	def _turn(self, del_angle):
