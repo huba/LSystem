@@ -56,7 +56,7 @@ class SurfaceHandler(object):
 		"""
 		Pushing the current coordinate to the stack.
 		"""
-		self.coordinate_stack.append((self.x, self.y))
+		self.coordinate_stack.append((self.x, self.y, self.angle))
 	
 	
 	def pop(self):
@@ -65,7 +65,7 @@ class SurfaceHandler(object):
 		sets it as the current coordinate.
 		"""
 		#TODO: handling exceptions, in case the stack is empty.
-		(self.x, self.y) = self.coordinate_stack.pop()
+		(self.x, self.y, self.angle) = self.coordinate_stack.pop()
 	
 	
 	def turn_right(self, del_angle):

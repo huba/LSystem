@@ -90,6 +90,14 @@ class LSystemFactory(object):
 				print(token, end = ' ')
 				surface_handler.turn_left(self.angle)
 			
+			elif token == "[":
+				print(token, end = ' ')
+				surface_handler.push()
+			
+			elif token == "]":
+				print(token, end = ' ')
+				surface_handler.pop()
+			
 			else:
 				print(token, end = ' ')
 		
