@@ -28,6 +28,19 @@ class SurfaceHandler(object):
 		(self.x, self.y) = coordinates
 		self.angle = angle % 360 # The current angle to the horizontal axis, increases anti-clockwise.
 		self.coordinate_stack = []
+		self._side_counter = 0 #variable for counting the sides
+	
+	
+	def counter_increment(self):
+		self._side_counter += 1
+	
+	
+	def counter_reset(self):
+		self._side_counter = 0
+	
+	
+	def get_counter(self):
+		return self._side_counter
 	
 	
 	def line_forward(self, distance):
@@ -65,7 +78,8 @@ class SurfaceHandler(object):
 		sets it as the current coordinate.
 		"""
 		#TODO: handling exceptions, in case the stack is empty.
-		(self.x, self.y, self.angle) = self.coordinate_stack.pop()
+		if len(self.coordinate_stack) > 0:
+			(self.x, self.y, self.angle) = self.coordinate_stack.pop()
 	
 	
 	def turn_right(self, del_angle):

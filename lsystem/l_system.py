@@ -18,7 +18,7 @@ Copyright (c) 2013 Huba Z. Nagy
  OTHER DEALINGS IN THE SOFTWARE.
 """
 
-import math
+import random
 
 class LSystemFactory(object):
 	"""
@@ -47,8 +47,20 @@ class LSystemFactory(object):
 		rule_expressions = full_rule_expr.strip().split(',') #each rule in the rule expression is separated by a comma
 		
 		for rule_expr in rule_expressions:
-			sides = rule_expr.strip().split('>')
-			self.rules[sides[0].strip()] = sides[1].strip()
+			token_prob, replacement = rule_expr.strip().split('>')
+			token, probability = token_prob.strip().split(':')
+			
+			token = token.strip()
+			probability = float(probability.strip())
+			replacement = replacement.strip()
+			
+			if token in self.rules:
+				#inserts each rule into a weighted probability list
+				self.rules[token].append((probability, replacement))
+				
+			else:
+				self.rules[token] = [(probability, replacement)]
+				
 		
 		print(self.rules)
 	
@@ -63,6 +75,7 @@ class LSystemFactory(object):
 		the fully expanded expression is not stored in memory.
 		"""
 		if expression == None:
+			surface_handler.counter_reset() #Resets the side counter
 			expression = self.expression #For the first level on the call stack no expression
 			                             #should be passed, so the current expression is set to
 			                             #the starting expression
@@ -73,13 +86,14 @@ class LSystemFactory(object):
 				#recursion depth as long as the specified
 				#target depth (or order) is not reached.
 				self.evolve_on_surface(surface_handler, 
-				                       self.rules[token], 
+				                       self.find_rule(token), 
 				                       current_order + 1, 
 				                       target_order)
 			
 			elif (token in self.forward_tokens):
 				print(token, end = ' ')
 				surface_handler.line_forward(self.distance)
+				surface_handler.counter_increment()
 			
 			elif token == "+":
 				#updating the angles
@@ -101,3 +115,23 @@ class LSystemFactory(object):
 			else:
 				print(token, end = ' ')
 		
+		
+	def find_rule(self, token):
+		"""
+		Selects the appropriate replacement string for the given token and
+		randomizes it according to the probability ratios.
+		each rule covers a certain range between 0 and 1 and this function
+		iterates over the list of possible replacements in order to find one.
+		"""
+		
+		if not token in self.rules:
+			return ' '
+		
+		choice = random.randrange(1, 101) / 100
+		sum_so_far = 0.0
+		
+		for (prob, rule) in self.rules[token]:
+			sum_so_far += prob
+			if choice <= sum_so_far:
+				return rule
+
